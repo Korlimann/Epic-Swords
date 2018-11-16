@@ -6,18 +6,22 @@ import java.util.Set;
 import com.korlimann.epic_swords.Main;
 //import com.korlimann.epic_swords.gen.KFCWorldGen;
 import com.korlimann.epic_swords.init.ModBlocks;
+import com.korlimann.epic_swords.init.ModEntities;
 import com.korlimann.epic_swords.init.ModItems;
 import com.korlimann.epic_swords.util.ConsoleLogger;
 import com.korlimann.epic_swords.util.IHasModel;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @EventBusSubscriber
@@ -29,6 +33,7 @@ public class ObjectRegistry {
 	
 	public static Set<Item> items = new HashSet<Item>();
 	public static Set<Block> blocks = new HashSet<Block>();
+	public static Set<EntityEntry> entity = new HashSet<EntityEntry>();
 	
 	public static void prepareBlocks(){
 		
@@ -36,6 +41,18 @@ public class ObjectRegistry {
 	
 	public static void prepareItems() {
 		items.add(ModItems.TERRA_BLADE);
+	}
+	
+	public static void prepareEntities() {
+		entity.add(ModEntities.TERRA_BLADE_BEAM);
+	}
+	
+	@SubscribeEvent
+	public static void registerEntities(final RegistryEvent.Register<EntityEntry> event) {
+		for(EntityEntry entity: entity){
+			event.getRegistry().register(entity);
+		}
+		ConsoleLogger.info("Registered Entities");
 	}
 	
 	//This method will be called without us calling it. This is because 
@@ -88,6 +105,12 @@ public class ObjectRegistry {
 			}
 		}
 		ConsoleLogger.info("Item Models loaded");
+		
+		for(EntityEntry entity : entity) {
+			if(entity instanceof IHasModel) {
+				((IHasModel)entity).registerModels();
+			}
+		}
 	}
 	
 	public static void Common() {
