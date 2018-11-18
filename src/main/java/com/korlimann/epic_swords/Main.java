@@ -1,5 +1,6 @@
 package com.korlimann.epic_swords;
 
+import com.korlimann.epic_swords.proxy.IProxy;
 import com.korlimann.epic_swords.proxy.ServerProxy;
 import com.korlimann.epic_swords.tabs.EpicSwordsTab;
 import com.korlimann.epic_swords.util.Reference;
@@ -22,8 +23,8 @@ public class Main {
 	@Instance
 	public static Main instance;
 	
-	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
-	public static ServerProxy proxy;
+	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
+	public static IProxy proxy;
 	
 	@EventHandler
 	public static void PreInit(FMLPreInitializationEvent event) {

@@ -18,6 +18,6 @@ public class RenderRegistry {
 
 	@SubscribeEvent
 	public static void registerRenderers(final ModelRegistryEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(EntityTerraBladeProjectile.class, renderManager -> new RenderEntityTerraBladeProjectile(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTerraBladeProjectile.class, renderManager -> new RenderEntityTerraBladeProjectile(renderManager, 1.0F));
 	}
 }
