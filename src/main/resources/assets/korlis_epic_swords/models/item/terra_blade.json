@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "es:items/terra_blade",
-		"1": "es:items/terra_blade_backside",
-		"particle": "es:items/terra_blade"
+		"0": "korlis_epic_swords:items/terra_blade",
+		"1": "korlis_epic_swords:items/terra_blade_backside",
+		"particle": "korlis_epic_swords:items/terra_blade"
 	},
 	"elements": [
 		{

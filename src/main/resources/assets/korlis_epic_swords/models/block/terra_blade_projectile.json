@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "es:entities/projectiles/terra_blade_beam",
-		"particle": "es:entities/projectiles/terra_blade_beam"
+		"0": "korlis_epic_swords:entities/projectiles/terra_blade_beam",
+		"particle": "korlis_epic_swords:entities/projectiles/terra_blade_beam"
 	},
 	"elements": [
 		{
