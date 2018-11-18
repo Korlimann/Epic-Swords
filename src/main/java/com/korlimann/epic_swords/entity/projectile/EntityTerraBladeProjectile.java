@@ -9,17 +9,14 @@ public class EntityTerraBladeProjectile extends EntityFireball {
 
 	public EntityTerraBladeProjectile(World worldIn) {
 		super(worldIn);
-		this.onUpdate();
 	}
 	
 	public EntityTerraBladeProjectile(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
 		super(worldIn, x, y, z, accelX, accelY, accelZ);
-		this.onUpdate();
 	}
 	
 	public EntityTerraBladeProjectile(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ) {
 		super(worldIn, shooter, accelX, accelY, accelZ);
-		this.onUpdate();
 	}
 
 	@Override

@@ -1,9 +1,9 @@
-package com.korlimann.epic_swords.proxy.client;
+package com.korlimann.epic_swords.client;
 
+import com.korlimann.epic_swords.client.renderer.entity.RenderEntityTerraBladeProjectile;
 import com.korlimann.epic_swords.entity.projectile.EntityTerraBladeProjectile;
 import com.korlimann.epic_swords.init.ModItems;
-import com.korlimann.epic_swords.proxy.CommonProxy;
-import com.korlimann.epic_swords.proxy.client.renderer.entity.RenderEntityTerraBladeProjectile;
+import com.korlimann.epic_swords.proxy.ServerProxy;
 import com.korlimann.epic_swords.util.Reference;
 
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = { Side.CLIENT })
-public class ClientRegistry extends CommonProxy{
+public class ClientRegistry extends ServerProxy{
 
 	@SubscribeEvent
 	public static void onModelRegistry(ModelRegistryEvent event) {

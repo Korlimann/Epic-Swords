@@ -1,7 +1,7 @@
 package com.korlimann.epic_swords.util.handlers;
 
+import com.korlimann.epic_swords.client.renderer.entity.RenderEntityTerraBladeProjectile;
 import com.korlimann.epic_swords.entity.projectile.EntityTerraBladeProjectile;
-import com.korlimann.epic_swords.proxy.client.renderer.entity.RenderEntityTerraBladeProjectile;
 import com.korlimann.epic_swords.util.Reference;
 
 import net.minecraft.client.renderer.entity.Render;

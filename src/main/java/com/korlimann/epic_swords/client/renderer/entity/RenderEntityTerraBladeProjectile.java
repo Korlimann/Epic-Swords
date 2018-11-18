@@ -1,4 +1,4 @@
-package com.korlimann.epic_swords.proxy.client.renderer.entity;
+package com.korlimann.epic_swords.client.renderer.entity;
 
 import javax.annotation.Nonnull;
 
