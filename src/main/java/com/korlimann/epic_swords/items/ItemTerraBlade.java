@@ -1,6 +1,7 @@
 package com.korlimann.epic_swords.items;
 
 import com.korlimann.epic_swords.Main;
+import com.korlimann.epic_swords.entity.projectile.EntityTerraBladeProjectile;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -21,12 +22,16 @@ public class ItemTerraBlade extends ItemSword {
 	}		
 	
 	@Override
-	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-		//world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-		//BlockPos pos1 = new BlockPos(player.posX, player.posY, player.posZ);
-		//world.playSoun(player, pos1, soundIn, category, volume, pitch);
-		// IMPORTANT! Only spawn new entities on the server. If the world is not remote,
-		// that means you are on the server:
+	public boolean onEntitySwing(EntityLivingBase entity, ItemStack stack) {
+		if(!(entity instanceof EntityPlayer)) {
+			return true;
+		}
+		EntityPlayer player = (EntityPlayer) entity;
+		World world = player.getEntityWorld();
+		if(!world.isRemote) {
+			EntityTerraBladeProjectile projectile = new EntityTerraBladeProjectile(world, player, 1, 1, 1);
+			world.spawnEntity(projectile);
+		}
 		return true;
 	}
 }
