@@ -9,6 +9,8 @@ public class Reference {
 	public static final String NAME = "O O F";
 	public static final String VERSION = "v1.0";
 	public static final String ACCEPTED_VERSIONS = "[1.12.2]";
-	public static final String CLIENT_PROXY_CLASS = "com.korlimann.epic_swords.proxy.client.ClientProxy";
+	public static final String CLIENT_PROXY_CLASS = "com.korlimann.epic_swords.proxy.client.ClientRegistry";
 	public static final String COMMON_PROXY_CLASS = "com.korlimann.epic_swords.proxy.CommonProxy";
+	
+	public static final String terra_blade = "terra_blade";
 }

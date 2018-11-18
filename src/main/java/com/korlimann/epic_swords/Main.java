@@ -3,7 +3,6 @@ package com.korlimann.epic_swords;
 import com.korlimann.epic_swords.proxy.CommonProxy;
 import com.korlimann.epic_swords.tabs.EpicSwordsTab;
 import com.korlimann.epic_swords.util.Reference;
-import com.korlimann.epic_swords.util.handlers.ObjectRegistry;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Mod;
@@ -28,12 +27,12 @@ public class Main {
 	
 	@EventHandler
 	public static void PreInit(FMLPreInitializationEvent event) {
-		ObjectRegistry.Common();
+		
 	}
 	
 	@EventHandler
 	public static void init(FMLInitializationEvent event) {
-		ObjectRegistry.initRegistry();
+		
 	}
 	
 	@EventHandler
