@@ -1,7 +1,6 @@
 package com.korlimann.epic_swords;
 
 import com.korlimann.epic_swords.proxy.IProxy;
-import com.korlimann.epic_swords.proxy.ServerProxy;
 import com.korlimann.epic_swords.tabs.EpicSwordsTab;
 import com.korlimann.epic_swords.util.Reference;
 

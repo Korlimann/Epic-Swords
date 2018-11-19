@@ -3,7 +3,6 @@ package com.korlimann.epic_swords.util.handlers;
 import com.korlimann.epic_swords.entity.projectile.EntityTerraBladeProjectile;
 import com.korlimann.epic_swords.util.Reference;
 
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
