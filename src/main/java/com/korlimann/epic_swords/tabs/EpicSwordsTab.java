@@ -1,11 +1,9 @@
 package com.korlimann.epic_swords.tabs;
 
 import com.korlimann.epic_swords.init.ModItems;
-import com.korlimann.epic_swords.items.ItemTerraBlade;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Item.ToolMaterial;
 
 public class EpicSwordsTab extends CreativeTabs {
 

@@ -3,13 +3,10 @@ package com.korlimann.epic_swords.items;
 import com.korlimann.epic_swords.Main;
 import com.korlimann.epic_swords.entity.projectile.EntityTerraBladeProjectile;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemTerraBlade extends ItemSword {
@@ -29,7 +26,7 @@ public class ItemTerraBlade extends ItemSword {
 		EntityPlayer player = (EntityPlayer) entity;
 		World world = player.getEntityWorld();
 		if(!world.isRemote) {
-			EntityTerraBladeProjectile projectile = new EntityTerraBladeProjectile(world, player, 1, 1, 1);
+			EntityTerraBladeProjectile projectile = new EntityTerraBladeProjectile(world, player);
 			world.spawnEntity(projectile);
 		}
 		return true;

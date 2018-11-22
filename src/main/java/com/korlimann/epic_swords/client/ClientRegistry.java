@@ -1,7 +1,5 @@
 package com.korlimann.epic_swords.client;
 
-import com.korlimann.epic_swords.client.renderer.entity.RenderEntityTerraBladeProjectile;
-import com.korlimann.epic_swords.entity.projectile.EntityTerraBladeProjectile;
 import com.korlimann.epic_swords.init.ModItems;
 import com.korlimann.epic_swords.proxy.ServerProxy;
 import com.korlimann.epic_swords.util.Reference;
