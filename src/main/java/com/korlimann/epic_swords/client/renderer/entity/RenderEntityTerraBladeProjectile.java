@@ -34,7 +34,7 @@ public class RenderEntityTerraBladeProjectile<T extends EntityTerraBladeProjecti
 	
 	@Override
 	public void doRender(@Nonnull T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		/*GlStateManager.pushMatrix();
+		GlStateManager.pushMatrix();
         this.bindEntityTexture(entity);
         GlStateManager.translate((float)x, (float)y, (float)z);
         GlStateManager.enableRescaleNormal();
@@ -51,7 +51,8 @@ public class RenderEntityTerraBladeProjectile<T extends EntityTerraBladeProjecti
         float f6 = 0.25F;
         GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate((float)(this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-
+        this.bindTexture(getEntityTexture(entity));
+        
         if (this.renderOutlines)
         {
             GlStateManager.enableColorMaterial();
@@ -73,7 +74,7 @@ public class RenderEntityTerraBladeProjectile<T extends EntityTerraBladeProjecti
 
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);*/
+        super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
 }
