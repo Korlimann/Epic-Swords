@@ -5,6 +5,7 @@ import com.korlimann.epic_swords.entity.projectile.EntityTerraBladeProjectile;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
@@ -21,14 +22,15 @@ public class ItemTerraBlade extends ItemSword {
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entity, ItemStack stack) {
 		if(!(entity instanceof EntityPlayer)) {
-			return true;
+			return false;
 		}
 		EntityPlayer player = (EntityPlayer) entity;
 		World world = player.getEntityWorld();
 		if(!world.isRemote) {
 			EntityTerraBladeProjectile projectile = new EntityTerraBladeProjectile(world, player);
+            projectile.shoot(player, player.rotationPitch, player.rotationYaw, 0.5F, 1.5F, 1.0F);
 			world.spawnEntity(projectile);
 		}
-		return true;
+		return false;
 	}
 }

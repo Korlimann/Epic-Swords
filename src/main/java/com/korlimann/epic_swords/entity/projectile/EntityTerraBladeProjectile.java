@@ -27,6 +27,11 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 	private int ticksAlive;
 	private double damage;
 	private int knockbackStrength;
+	//private double motionX = 1;
+	//private double motionY = 1;
+	//private double motionZ = 1;
+	private int blocksTravelled = 0;
+	RayTraceResult raytraceresult;
 
 	public EntityTerraBladeProjectile(World worldIn) {
 		super(worldIn);
@@ -36,6 +41,7 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 	public EntityTerraBladeProjectile(World worldIn, EntityLivingBase thrower) {
 		super(worldIn, thrower);
 		this.thrower = thrower;
+		raytraceresult = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.thrower);
 		this.setDamage(5);
 	}
 
@@ -44,37 +50,47 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 		this.setDamage(5);
 	}
 	
-	
-	/*public EntityTerraBladeProjectile(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
-		super(worldIn, x, y, z, accelX, accelY, accelZ);
-		this.setSize(1.0F, 1.0F);
-        this.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
-        this.setPosition(x, y, z);
-        double d0 = (double)MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.1D;
-        this.accelerationY = accelY / d0 * 0.1D;
-        this.accelerationZ = accelZ / d0 * 0.1D;
-        this.setDamage(5);
-	}
-	
-	public EntityTerraBladeProjectile(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ) {
-		super(worldIn, shooter, accelX, accelY, accelZ);
-		this.thrower = shooter;
-        this.setSize(1.0F, 1.0F);
-        this.setLocationAndAngles(shooter.posX, shooter.posY, shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-        this.setPosition(this.posX, this.posY, this.posZ);
-        this.motionX = 0.0D;
-        this.motionY = 0.0D;
-        this.motionZ = 0.0D;
-        accelX = accelX + this.rand.nextGaussian() * 0.4D;
-        accelY = accelY + this.rand.nextGaussian() * 0.4D;
-        accelZ = accelZ + this.rand.nextGaussian() * 0.4D;
-        double d0 = (double)MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.1D;
-        this.accelerationY = accelY / d0 * 0.1D;
-        this.accelerationZ = accelZ / d0 * 0.1D;
-        this.setDamage(5);
-	}*/
+	public void onUpdate()
+    {
+        if (this.world.isRemote || (this.thrower == null || !this.thrower.isDead) && this.world.isBlockLoaded(new BlockPos(this)))
+        {
+            ++this.ticksInAir;
+
+            if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult))
+            {
+                this.onImpact(raytraceresult);
+            }
+
+            this.posX += this.motionX;
+            this.posY += this.motionY;
+            this.posZ += this.motionZ;
+            ProjectileHelper.rotateTowardsMovement(this, 0.2F);
+            float f = this.getMotionFactor();
+
+            if (this.isInWater()) {
+                for (int i = 0; i < 4; ++i) {
+                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                }
+
+                f = 0.8F;
+            }
+
+            //this.motionX *= (double)f;
+            //this.motionY *= (double)f;
+            //this.motionZ *= (double)f;
+            this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
+            this.setPosition(this.posX, this.posY, this.posZ);
+            this.blocksTravelled++;
+            
+            if(this.blocksTravelled > 100) {
+            	this.setDead();
+            }
+        }
+        else
+        {
+            this.setDead();
+        }
+    }
 	
 	@Override
 	protected void onImpact(RayTraceResult result) {
@@ -129,49 +145,7 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
         }   
 	}
 	
-	public void onUpdate()
-    {
-        if (this.world.isRemote || (this.thrower == null || !this.thrower.isDead) && this.world.isBlockLoaded(new BlockPos(this)))
-        {
-            ++this.ticksInAir;
-            RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.thrower);
-
-            if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult))
-            {
-                this.onImpact(raytraceresult);
-            }
-
-            this.posX += this.motionX;
-            this.posY += this.motionY;
-            this.posZ += this.motionZ;
-            ProjectileHelper.rotateTowardsMovement(this, 0.2F);
-            float f = this.getMotionFactor();
-
-            if (this.isInWater())
-            {
-                for (int i = 0; i < 4; ++i)
-                {
-                    //float f1 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
-                }
-
-                f = 0.8F;
-            }
-
-            /*this.motionX += this.accelerationX;
-            this.motionY += this.accelerationY;
-            this.motionZ += this.accelerationZ;*/
-            this.motionX *= (double)f;
-            this.motionY *= (double)f;
-            this.motionZ *= (double)f;
-            this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
-            this.setPosition(this.posX, this.posY, this.posZ);
-        }
-        else
-        {
-            this.setDead();
-        }
-    }
+	
 
     protected EnumParticleTypes getParticleType()
     {
