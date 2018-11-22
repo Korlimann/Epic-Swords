@@ -40,6 +40,9 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 	private int blocksTravelled = 0;
 	RayTraceResult raytraceresult;
 	private int enemiesHit = 0;
+	private double initialPosX;
+	private double initialPosY;
+	private double initialPosZ;
 
 	public EntityTerraBladeProjectile(World worldIn) {
 		super(worldIn);
@@ -51,6 +54,9 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 		this.thrower = thrower;
 		raytraceresult = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.thrower);
 		this.setDamage(5);
+		this.initialPosX = thrower.posX;
+		this.initialPosY = thrower.posY;
+		this.initialPosZ = thrower.posZ;
 	}
 
 	public EntityTerraBladeProjectile(World worldIn, double x, double y, double z) {
@@ -76,6 +82,12 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
             this.posZ += this.motionZ;
             BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
             IBlockState iblockstate = this.world.getBlockState(blockpos);
+            double distanceX = this.posX - this.initialPosX;
+            double distanceY = this.posY - this.initialPosY;
+            double distanceZ = this.posZ - this.initialPosZ;
+            //if(distanceX < 0) distanceX = distanceX * -1;
+            //if(distanceY < 0) distanceY = distanceY * -1;
+            //if(distanceZ < 0) distanceZ = distanceZ * -1;
 
             if (iblockstate.getMaterial() != Material.AIR)
             {
@@ -92,16 +104,8 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
                 f = 0.8F;
             }
 
-            //this.motionX *= (double)f;
-            //this.motionY *= (double)f;
-            //this.motionZ *= (double)f;
             this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
             this.setPosition(this.posX, this.posY, this.posZ);
-            this.blocksTravelled++;
-            
-            if(this.blocksTravelled > 100) {
-            	this.setDead();
-            }
         }
         else
         {
