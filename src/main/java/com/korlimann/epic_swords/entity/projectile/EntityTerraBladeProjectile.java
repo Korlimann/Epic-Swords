@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityFireball;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityTerraBladeProjectile extends EntityFireball {
+public class EntityTerraBladeProjectile extends EntityThrowable {
 
 	private int ticksInAir;
 	private int ticksAlive;
@@ -30,9 +30,22 @@ public class EntityTerraBladeProjectile extends EntityFireball {
 
 	public EntityTerraBladeProjectile(World worldIn) {
 		super(worldIn);
+		this.setDamage(5);
 	}
 	
-	public EntityTerraBladeProjectile(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
+	public EntityTerraBladeProjectile(World worldIn, EntityLivingBase thrower) {
+		super(worldIn, thrower);
+		this.thrower = thrower;
+		this.setDamage(5);
+	}
+
+	public EntityTerraBladeProjectile(World worldIn, double x, double y, double z) {
+		super(worldIn, x, y, z);
+		this.setDamage(5);
+	}
+	
+	
+	/*public EntityTerraBladeProjectile(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
 		super(worldIn, x, y, z, accelX, accelY, accelZ);
 		this.setSize(1.0F, 1.0F);
         this.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
@@ -46,7 +59,7 @@ public class EntityTerraBladeProjectile extends EntityFireball {
 	
 	public EntityTerraBladeProjectile(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ) {
 		super(worldIn, shooter, accelX, accelY, accelZ);
-		this.shootingEntity = shooter;
+		this.thrower = shooter;
         this.setSize(1.0F, 1.0F);
         this.setLocationAndAngles(shooter.posX, shooter.posY, shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
         this.setPosition(this.posX, this.posY, this.posZ);
@@ -61,7 +74,7 @@ public class EntityTerraBladeProjectile extends EntityFireball {
         this.accelerationY = accelY / d0 * 0.1D;
         this.accelerationZ = accelZ / d0 * 0.1D;
         this.setDamage(5);
-	}
+	}*/
 	
 	@Override
 	protected void onImpact(RayTraceResult result) {
@@ -74,13 +87,13 @@ public class EntityTerraBladeProjectile extends EntityFireball {
         	
         	DamageSource damagesource;
         	
-        	if (this.shootingEntity == null)
+        	if (this.thrower == null)
 	        {
-	            damagesource = DamageSource.causePlayerDamage((EntityPlayer) this.shootingEntity);
+	            damagesource = DamageSource.causePlayerDamage((EntityPlayer) this.thrower);
 	        }
 	        else
 	        {
-	            damagesource = DamageSource.causePlayerDamage((EntityPlayer) this.shootingEntity);
+	            damagesource = DamageSource.causePlayerDamage((EntityPlayer) this.thrower);
 	        }
         	
         	if (entity.attackEntityFrom(damagesource, (float)i))
@@ -99,15 +112,15 @@ public class EntityTerraBladeProjectile extends EntityFireball {
                         }
                     }
 
-                    if (this.shootingEntity instanceof EntityLivingBase)
+                    if (this.thrower instanceof EntityLivingBase)
                     {
-                        EnchantmentHelper.applyThornEnchantments(entitylivingbase, this.shootingEntity);
-                        EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase)this.shootingEntity, entitylivingbase);
+                        EnchantmentHelper.applyThornEnchantments(entitylivingbase, this.thrower);
+                        EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase)this.thrower, entitylivingbase);
                     }
 
-                    if (this.shootingEntity != null && entitylivingbase != this.shootingEntity && entitylivingbase instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP)
+                    if (this.thrower != null && entitylivingbase != this.thrower && entitylivingbase instanceof EntityPlayer && this.thrower instanceof EntityPlayerMP)
                     {
-                        ((EntityPlayerMP)this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
+                        ((EntityPlayerMP)this.thrower).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
                     }
                 }
 
@@ -118,10 +131,10 @@ public class EntityTerraBladeProjectile extends EntityFireball {
 	
 	public void onUpdate()
     {
-        if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this)))
+        if (this.world.isRemote || (this.thrower == null || !this.thrower.isDead) && this.world.isBlockLoaded(new BlockPos(this)))
         {
             ++this.ticksInAir;
-            RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.shootingEntity);
+            RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.thrower);
 
             if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult))
             {
@@ -145,9 +158,9 @@ public class EntityTerraBladeProjectile extends EntityFireball {
                 f = 0.8F;
             }
 
-            this.motionX += this.accelerationX;
+            /*this.motionX += this.accelerationX;
             this.motionY += this.accelerationY;
-            this.motionZ += this.accelerationZ;
+            this.motionZ += this.accelerationZ;*/
             this.motionX *= (double)f;
             this.motionY *= (double)f;
             this.motionZ *= (double)f;
@@ -179,7 +192,7 @@ public class EntityTerraBladeProjectile extends EntityFireball {
     public void writeEntityToNBT(NBTTagCompound compound)
     {
         compound.setTag("direction", this.newDoubleNBTList(new double[] {this.motionX, this.motionY, this.motionZ}));
-        compound.setTag("power", this.newDoubleNBTList(new double[] {this.accelerationX, this.accelerationY, this.accelerationZ}));
+        //compound.setTag("power", this.newDoubleNBTList(new double[] {this.accelerationX, this.accelerationY, this.accelerationZ}));
         compound.setInteger("life", this.ticksAlive);
     }
 
@@ -194,9 +207,9 @@ public class EntityTerraBladeProjectile extends EntityFireball {
 
             if (nbttaglist.tagCount() == 3)
             {
-                this.accelerationX = nbttaglist.getDoubleAt(0);
-                this.accelerationY = nbttaglist.getDoubleAt(1);
-                this.accelerationZ = nbttaglist.getDoubleAt(2);
+                //this.accelerationX = nbttaglist.getDoubleAt(0);
+                //this.accelerationY = nbttaglist.getDoubleAt(1);
+                //this.accelerationZ = nbttaglist.getDoubleAt(2);
             }
         }
 
@@ -250,14 +263,14 @@ public class EntityTerraBladeProjectile extends EntityFireball {
                     this.motionX = vec3d.x;
                     this.motionY = vec3d.y;
                     this.motionZ = vec3d.z;
-                    this.accelerationX = this.motionX * 0.1D;
-                    this.accelerationY = this.motionY * 0.1D;
-                    this.accelerationZ = this.motionZ * 0.1D;
+                    //this.accelerationX = this.motionX * 0.1D;
+                    //this.accelerationY = this.motionY * 0.1D;
+                    //this.accelerationZ = this.motionZ * 0.1D;
                 }
 
                 if (source.getTrueSource() instanceof EntityLivingBase)
                 {
-                    this.shootingEntity = (EntityLivingBase)source.getTrueSource();
+                    this.thrower = (EntityLivingBase)source.getTrueSource();
                 }
 
                 return true;

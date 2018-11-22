@@ -26,7 +26,7 @@ public class ItemTerraBlade extends ItemSword {
 		EntityPlayer player = (EntityPlayer) entity;
 		World world = player.getEntityWorld();
 		if(!world.isRemote) {
-			EntityTerraBladeProjectile projectile = new EntityTerraBladeProjectile(world, player, 1, 1, 1);
+			EntityTerraBladeProjectile projectile = new EntityTerraBladeProjectile(world, player);
 			world.spawnEntity(projectile);
 		}
 		return true;
