@@ -1,5 +1,10 @@
 package com.korlimann.epic_swords.entity.projectile;
 
+import com.korlimann.epic_swords.util.ConsoleLogger;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,8 +16,10 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.SPacketChangeGameState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -32,6 +39,7 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 	//private double motionZ = 1;
 	private int blocksTravelled = 0;
 	RayTraceResult raytraceresult;
+	private int enemiesHit = 0;
 
 	public EntityTerraBladeProjectile(World worldIn) {
 		super(worldIn);
@@ -55,6 +63,8 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
         if (this.world.isRemote || (this.thrower == null || !this.thrower.isDead) && this.world.isBlockLoaded(new BlockPos(this)))
         {
             ++this.ticksInAir;
+            
+            raytraceresult = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.thrower);
 
             if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult))
             {
@@ -64,6 +74,13 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
             this.posX += this.motionX;
             this.posY += this.motionY;
             this.posZ += this.motionZ;
+            BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
+            IBlockState iblockstate = this.world.getBlockState(blockpos);
+
+            if (iblockstate.getMaterial() != Material.AIR)
+            {
+                this.setDead();
+            }
             ProjectileHelper.rotateTowardsMovement(this, 0.2F);
             float f = this.getMotionFactor();
 
@@ -100,6 +117,11 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
         int i = MathHelper.ceil((double)f * this.damage);
 
         if (entity != null) {
+        	
+        	this.enemiesHit++;
+        	if(this.enemiesHit > 3) {
+        		this.setDead();
+        	}
         	
         	DamageSource damagesource;
         	
