@@ -37,7 +37,6 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 	//private double motionX = 1;
 	//private double motionY = 1;
 	//private double motionZ = 1;
-	private int blocksTravelled = 0;
 	RayTraceResult raytraceresult;
 	private int enemiesHit = 0;
 	private double initialPosX;
@@ -54,9 +53,10 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 		this.thrower = thrower;
 		raytraceresult = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.thrower);
 		this.setDamage(5);
-		this.initialPosX = thrower.posX;
-		this.initialPosY = thrower.posY;
-		this.initialPosZ = thrower.posZ;
+		BlockPos playerpos = thrower.getPosition();
+		this.initialPosX = playerpos.getX();
+		this.initialPosZ = playerpos.getY();
+		this.initialPosY = playerpos.getZ();
 	}
 
 	public EntityTerraBladeProjectile(World worldIn, double x, double y, double z) {
@@ -88,6 +88,9 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
             //if(distanceX < 0) distanceX = distanceX * -1;
             //if(distanceY < 0) distanceY = distanceY * -1;
             //if(distanceZ < 0) distanceZ = distanceZ * -1;
+            ConsoleLogger.info("Original Pos: " + this.initialPosX + "| Current Pos: " + this.posX + "| Distance: " + distanceX); 
+            ConsoleLogger.info("Original Pos: " + this.initialPosY + "| Current Pos: " + this.posY + "| Distance: " + distanceY); 
+            ConsoleLogger.info("Original Pos: " + this.initialPosZ + "| Current Pos: " + this.posZ + "| Distance: " + distanceZ); 
 
             if (iblockstate.getMaterial() != Material.AIR)
             {
@@ -106,6 +109,9 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 
             this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
             this.setPosition(this.posX, this.posY, this.posZ);
+            if(this.ticksInAir > 100) {
+            	this.setDead();
+            }
         }
         else
         {
