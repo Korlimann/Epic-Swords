@@ -3,20 +3,27 @@ package com.korlimann.epic_swords.client.renderer.entity;
 import javax.annotation.Nonnull;
 
 import com.korlimann.epic_swords.entity.projectile.EntityTerraBladeProjectile;
+import com.korlimann.epic_swords.init.ModItems;
 import com.korlimann.epic_swords.util.Reference;
+import com.korlimann.epic_swords.items.ItemTerraBladeBeam;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.ForgeHooksClient;
 
-public class RenderEntityTerraBladeProjectile<T extends EntityTerraBladeProjectile> extends Render<T>{
+public class RenderEntityTerraBladeProjectile extends Render<EntityTerraBladeProjectile>{
 
 	private final float scale;
 	
@@ -26,13 +33,37 @@ public class RenderEntityTerraBladeProjectile<T extends EntityTerraBladeProjecti
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(T entity) {
+	protected ResourceLocation getEntityTexture(EntityTerraBladeProjectile entity) {
 		return new ResourceLocation(Reference.MOD_ID, "textures/entities/projectiles/terra_blade_projectile.png");
 	}
 	
 	@Override
-	public void doRender(@Nonnull T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GlStateManager.pushMatrix();
+	public void doRender(final EntityTerraBladeProjectile entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+
+		try {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x, y + 0.5, z);
+
+			GlStateManager.translate(0, -entity.height / 2, 0);
+
+			GlStateManager.rotate(entityYaw, 0, 1, 0);
+
+			GlStateManager.rotate(90 - entity.rotationPitch, 1, 0, 0);
+
+			final ItemStack stack = new ItemStack(ModItems.TERRA_BLADE_BEAM);
+
+			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, entity.getEntityWorld(), null);
+			model = ForgeHooksClient.handleCameraTransforms(model, ItemCameraTransforms.TransformType.NONE, false);
+
+			this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);
+
+		} finally {
+			GlStateManager.popMatrix();
+		}
+		
+		/*GlStateManager.pushMatrix();
         this.bindEntityTexture(entity);
         GlStateManager.translate((float)x, (float)y, (float)z);
         GlStateManager.enableRescaleNormal();
@@ -69,7 +100,7 @@ public class RenderEntityTerraBladeProjectile<T extends EntityTerraBladeProjecti
 
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
+        super.doRender(entity, x, y, z, entityYaw, partialTicks);*/
 	}
 
 }

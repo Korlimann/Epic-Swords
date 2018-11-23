@@ -10,4 +10,8 @@ public class ModItems {
 
 	@GameRegistry.ObjectHolder(Reference.terra_blade)
 	public static final Item TERRA_BLADE = null;
+	
+	@GameRegistry.ObjectHolder(Reference.terra_blade_beam)
+	public static final Item TERRA_BLADE_BEAM = null;
+
 }

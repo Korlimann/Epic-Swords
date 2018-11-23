@@ -2,7 +2,6 @@ package com.korlimann.epic_swords.entity.projectile;
 
 import com.korlimann.epic_swords.util.ConsoleLogger;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -15,11 +14,11 @@ import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -42,7 +41,7 @@ public class EntityTerraBladeProjectile extends EntityThrowable {
 	private double initialPosX;
 	private double initialPosY;
 	private double initialPosZ;
-
+	
 	public EntityTerraBladeProjectile(World worldIn) {
 		super(worldIn);
 		this.setDamage(5);

@@ -1,6 +1,7 @@
 package com.korlimann.epic_swords.util.handlers;
 
 import com.korlimann.epic_swords.items.ItemTerraBlade;
+import com.korlimann.epic_swords.items.ItemTerraBladeBeam;
 import com.korlimann.epic_swords.util.Reference;
 
 import net.minecraft.item.Item;
@@ -15,6 +16,7 @@ public class ItemsRegistry {
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(
-				new ItemTerraBlade("terra_blade", ToolMaterial.DIAMOND));
+				new ItemTerraBlade("terra_blade", ToolMaterial.DIAMOND),
+				new ItemTerraBladeBeam("terra_blade_beam"));
 	}
 }

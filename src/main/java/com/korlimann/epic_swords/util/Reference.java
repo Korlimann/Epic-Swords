@@ -13,4 +13,5 @@ public class Reference {
 	public static final String SERVER_PROXY_CLASS = "com.korlimann.epic_swords.proxy.ServerProxy";
 	
 	public static final String terra_blade = "terra_blade";
+	public static final String terra_blade_beam = "terra_blade_beam";
 }
